@@ -1,0 +1,20 @@
+{
+  "name": "webui1",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:templates": "webui build ./src --out ./dist --plugin=webui",
+    "build:js": "esbuild src/index.ts --bundle --format=esm --outdir=./public --tsconfig=tsconfig.json",
+    "build": "npm run build:js && npm run build:templates",
+    "dev": "npm run build:js && webui serve ./src --state ./data/state.json --plugin=webui --servedir ./public --watch",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@microsoft/webui": "latest",
+    "@microsoft/webui-framework": "latest"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0"
+  }
+}
