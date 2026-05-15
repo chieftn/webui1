@@ -7,6 +7,21 @@
 </head>
 <body>
   <todo-app title="{{title}}"></todo-app>
+  <info-card title="{{title}}" body="{{body}}"></info-card>
+
+  <hr style="margin: 2rem 0;">
+  <h2>Downlevel Rendering Demo</h2>
+  <p>Click the button to fetch a server-rendered component as plain HTML (no shadow DOM):</p>
+  <button id="fetch-card" style="padding: 8px 16px; cursor: pointer;">Fetch Card from Server</button>
+  <div id="card-container"></div>
+
   <script type="module" src="/index.js"></script>
+  <script>
+    document.getElementById('fetch-card').addEventListener('click', async () => {
+      const res = await fetch('/api/render-card?title=Hello+from+the+server&body=This+is+downleveled+HTML');
+      const html = await res.text();
+      document.getElementById('card-container').insertAdjacentHTML('beforeend', html);
+    });
+  </script>
 </body>
 </html>
