@@ -26,30 +26,20 @@ app.get('/', (req, res) => {
   res.type('html').send(html);
 });
 
-// API endpoint — render a component via WebUI and return downleveled HTML
+// API endpoint — render a component directly and return downleveled HTML
 app.get('/api/render-card', (req, res) => {
   const title = req.query.title || 'Server-rendered card';
   const body = req.query.body || 'Rendered at ' + new Date().toLocaleTimeString();
 
-  const fullHtml = render(protocol, {
-    textdirection: 'ltr',
-    language: 'en',
-    title: title,
-    body: body,
-    items: [],
-    remainingCount: 0,
-  }, { plugin: 'webui' });
+  // Render just the info-card component — no full page render
+  const dsd = render(protocol, { title, body }, { entry: 'info-card', plugin: 'webui' });
 
-  // Extract the info-card's DSD inner content — strip the shadow DOM wrapper
-  const match = fullHtml.match(
-    /<info-card[^>]*><template shadowrootmode="open">([\s\S]*?)<\/template><\/info-card>/
-  );
+  // Strip the DSD wrapper — return the inner content as flat HTML
+  const inner = dsd
+    .replace(/^<template shadowrootmode="open">/, '')
+    .replace(/<\/template>$/, '');
 
-  if (match) {
-    res.type('html').send(match[1]);
-  } else {
-    res.status(500).send('Could not extract info-card from render output');
-  }
+  res.type('html').send(inner);
 });
 
 app.listen(PORT, () => {
