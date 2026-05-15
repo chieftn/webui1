@@ -1,0 +1,21 @@
+{
+  "name": "@webui1/components",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:templates": "webui build ./src --out ./dist --plugin=webui",
+    "build:js": "esbuild src/index.ts --bundle --format=esm --outdir=./public --tsconfig=tsconfig.json",
+    "build": "npm run build:templates && npm run build:js",
+    "dev": "npm run build:js && webui serve ./src --state ../server/data/state.json --plugin=webui --servedir ./public --watch"
+  },
+  "dependencies": {
+    "@fluentui/tokens": "^1.0.0-alpha.23",
+    "@fluentui/web-components": "^3.0.0-beta.133",
+    "@microsoft/webui": "latest",
+    "@microsoft/webui-framework": "latest"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.0"
+  }
+}

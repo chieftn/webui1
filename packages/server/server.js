@@ -1,35 +1,29 @@
 import express from 'express';
 import fs from 'node:fs';
+import path from 'node:path';
+import { createRequire } from 'node:module';
 import { render } from '@microsoft/webui';
+
+const require = createRequire(import.meta.url);
+
+// Resolve paths from the @webui1/components package
+const componentsDir = path.dirname(require.resolve('@webui1/components/package.json'));
+const protocol = fs.readFileSync(path.join(componentsDir, 'dist', 'protocol.bin'));
+const publicDir = path.join(componentsDir, 'public');
 
 const app = express();
 const PORT = 3000;
 
-// Load the pre-built protocol from disk (run `npm run build:templates` first)
-const protocol = fs.readFileSync('./dist/protocol.bin');
+// Serve static assets (JS bundle) from the components package
+app.use(express.static(publicDir));
 
-// Serve a simple page with a button
+// Load state
+const state = JSON.parse(fs.readFileSync('./data/state.json', 'utf-8'));
+
+// Main page — full SSR with DSD
 app.get('/', (req, res) => {
-  res.type('html').send(`<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Downlevel Demo</title>
-</head>
-<body>
-  <h1>Downlevel Rendering Demo</h1>
-  <p>Click the button to fetch a server-rendered component as plain HTML (no shadow DOM):</p>
-  <button id="fetch-card">Fetch Card from Server</button>
-  <div id="card-container"></div>
-  <script>
-    document.getElementById('fetch-card').addEventListener('click', async () => {
-      const res = await fetch('/api/render-card?title=Hello+from+server&body=This+was+rendered+at+' + encodeURIComponent(new Date().toLocaleTimeString()));
-      const html = await res.text();
-      document.getElementById('card-container').insertAdjacentHTML('beforeend', html);
-    });
-  </script>
-</body>
-</html>`);
+  const html = render(protocol, state, { plugin: 'webui' });
+  res.type('html').send(html);
 });
 
 // API endpoint — render a component via WebUI and return downleveled HTML
