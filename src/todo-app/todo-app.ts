@@ -14,8 +14,8 @@ export class TodoApp extends WebUIElement {
     this.remainingCount = (this.items ?? []).filter(i => i.state !== 'done').length;
   }
 
-  private get inputEl(): HTMLInputElement | null {
-    return this.shadowRoot?.querySelector('.add-input') as HTMLInputElement ?? null;
+  private get inputEl(): HTMLElement | null {
+    return this.shadowRoot?.querySelector('fluent-text-input') ?? null;
   }
 
   private nextId = 100;
@@ -31,10 +31,10 @@ export class TodoApp extends WebUIElement {
   }
 
   private addTodo(): void {
-    const input = this.inputEl;
+    const input = this.inputEl as any;
     if (!input) return;
 
-    const text = input.value.trim();
+    const text = (input.value || input.currentValue || '').trim();
     if (!text) return;
 
     this.items = [

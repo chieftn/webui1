@@ -1,9 +1,5 @@
-<div class="todo-item" @click="{onClick(e)}">
-  <button class="toggle" data-action="toggle" title="Toggle complete">
-    <if condition="state == 'done'">
-      <span class="check">&#10003;</span>
-    </if>
-  </button>
+<div class="todo-item">
+  <fluent-checkbox @change="{onToggle()}" checked="{{state == 'done' ? 'true' : undefined}}"></fluent-checkbox>
   <span class="title">{{title}}</span>
-  <button class="delete" data-action="delete" title="Delete">&times;</button>
+  <fluent-button @click="{onelete()}" appearance="subtle" size="small" title="Delete">&times;</fluent-button>
 </div>

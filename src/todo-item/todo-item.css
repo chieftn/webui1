@@ -6,19 +6,12 @@
   align-items: center;
   gap: 8px;
   padding: 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--colorNeutralStroke2, #eee);
 }
 .todo-item .title {
   flex: 1;
 }
 :host([state="done"]) .title {
   text-decoration: line-through;
-  color: #999;
-}
-.delete {
-  background: none;
-  border: none;
-  color: #cc0000;
-  font-size: 1.2em;
-  cursor: pointer;
+  color: var(--colorNeutralForeground4, #999);
 }

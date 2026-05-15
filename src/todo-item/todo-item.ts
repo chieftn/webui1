@@ -5,16 +5,12 @@ export class TodoItem extends WebUIElement {
   @attr title = '';
   @attr state = 'pending';
 
-  onClick(e: MouseEvent): void {
-    const target = e.composedPath()[0] as HTMLElement;
-    const action = target.closest('[data-action]')?.getAttribute('data-action');
-    if (!action) return;
+  onToggle(): void {
+    this.$emit('toggle-item', { id: this.id });
+  }
 
-    if (action === 'toggle') {
-      this.$emit('toggle-item', { id: this.id });
-    } else if (action === 'delete') {
-      this.$emit('delete-item', { id: this.id });
-    }
+  onDelete(): void {
+    this.$emit('delete-item', { id: this.id });
   }
 }
 

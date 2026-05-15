@@ -4,12 +4,12 @@
 >
   <h1>{{title}}</h1>
   <div class="add-form">
-    <input
+    <fluent-text-input
       class="add-input"
       placeholder="What needs to be done?"
       @keydown="{onAddKeydown(e)}"
-    />
-    <button class="add-button" @click="{onAddClick()}">Add</button>
+    ></fluent-text-input>
+    <fluent-button appearance="primary" @click="{onAddClick()}">Add</fluent-button>
   </div>
   <div class="todo-list">
     <for each="item in items">
